@@ -1,6 +1,11 @@
 ---
-title: "Human and Economic impact of a selection of weather events in the US (1950 - 2011)"
-output: html_document
+title: Human and Economic impact of a selection of weather events in the US (1950
+  - 2011)
+author: "Tristan FOULARD"
+date: "21st November 2020"
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 # Synopsis
@@ -8,14 +13,14 @@ Storms and other severe weather events can cause both public health and economic
 
 # Data processing 
 
-Load the packages that will be used throughout the study
+**Load the packages that will be used throughout the study**
 
 ```{r, echo = TRUE}
 library(plyr)
 library(ggplot2)
 ```
 
-Load the data from the Coursera website; download it into your working directory, unzip the file, and import the dataset into R. 
+**Load the data from the Coursera website; download it into your working directory, unzip the file, and import the dataset into R. **
 
 ```{r, echo = TRUE}
 path <- getwd()
@@ -24,7 +29,7 @@ download.file(url, file.path(path, "repdata-data-StormData.csv.bz2"))
 Storm_Data <- read.csv(bzfile("repdata-data-StormData.csv.bz2"))
 ```
 
-Take a first glance at the data
+**Take a first glance at the data**
 
 ```{r, echo = TRUE}
 names(Storm_Data)
@@ -32,7 +37,7 @@ names(Storm_Data)
 
 # Results
 
-Find the deadliest weather events 
+**Find the deadliest weather events**
 
 ```{r}
 ## Find the deadliest weather event
@@ -47,7 +52,8 @@ top10fatData <- fatalityData[1:10,]
 top10fatData
 ```
 
-Plot the 10 deadliest weather events 
+
+**Plot the 10 deadliest weather events**
 
 ```{r, echo = TRUE}
 ggplot(top10fatData, aes(x = reorder(EVTYPE, -FATALITIES), y = FATALITIES)) + 
@@ -58,7 +64,7 @@ ggplot(top10fatData, aes(x = reorder(EVTYPE, -FATALITIES), y = FATALITIES)) +
 ```
 
 
-Find the weather events that lead to the most injured people
+**Find the weather events that lead to the most injured people**
 
 ```{r, echo = TRUE}
 ## Find the event that leads to the most injured people
@@ -73,7 +79,7 @@ top10injData <- injuriesData[1:10,]
 top10injData
 ```
 
-Plot the 10 events that lead to the most injured people
+**Plot the 10 events that lead to the most injured people**
 
 ```{r, echo = TRUE}
 ggplot(top10injData, aes(x = reorder(EVTYPE, -INJURIES), y = INJURIES)) + 
@@ -84,8 +90,7 @@ ggplot(top10injData, aes(x = reorder(EVTYPE, -INJURIES), y = INJURIES)) +
 ```
 
 
-Find the weather events that have the biggest negative impact on the economy (cost the most). 
-Impact on the economy is characterized in this study by PROPDMG (the property damages) and CROPDMG (crop damages).
+**Find the weather events that have the biggest negative impact on the economy (cost the most).Impact on the economy is characterized in this study by PROPDMG (the property damages) and CROPDMG (crop damages).**
 
 ```{r, echo = TRUE}
 EconomicImpactData <- aggregate(PROPDMG + CROPDMG ~ EVTYPE, data = Storm_Data, FUN=sum)
@@ -96,7 +101,7 @@ top10EcoData <- EcoImpact[1:10,]
 top10EcoData
 ```
 
-Plot the 10 weather events the have the biggest negative impact on the economy (cost the most). 
+**Plot the 10 weather events the have the biggest negative impact on the economy (cost the most).**
 
 ```{r, echo = TRUE}
 ggplot(top10EcoData, aes(x = reorder(EVTYPE, -Damages), y = Damages)) + 
@@ -106,3 +111,15 @@ ggplot(top10EcoData, aes(x = reorder(EVTYPE, -Damages), y = Damages)) +
   theme(axis.text.x = element_text(angle = 90))
 ```
 
+
+# Conclusions
+This study seems to show that tornadoes are the deadliest weather events in the US throughout the years studied in this study (1950 to 2011); tornadoes are also the weather events that led to the most injured people in the US throughout the study. 
+Unsurprisingly, tornadoes also appear to be responsible for the highest negative impact in the US.
+
+Excessive heat and flash flood follow tornadoes in the number of fatalities, with about 2000 and 1000 respectively for the studied period. 
+
+Wind and flood follow tornadoes in the number of injuries. 
+
+As for the economic impact of the weather events, flash flood and wind follow tornadoes. 
+
+To sum up, it can thus be said that tornadoes should be very carefully monitored to avoid both the human and economic cost (though the property damages and crop damages might not be avoidable); (flash) floods and wind should also be carefully watched.  
